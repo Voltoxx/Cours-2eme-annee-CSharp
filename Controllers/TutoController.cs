@@ -1,6 +1,7 @@
 ﻿using CoursEnC.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CoursEnC.Context;
 
 namespace CoursEnC.Controllers
 {
@@ -9,55 +10,37 @@ namespace CoursEnC.Controllers
     public class TutoController : Controller
     {
 
+        private readonly AppDBContext context;
+
+        public TutoController(AppDBContext context)
+        {
+            this.context = context;
+        }
+
+
+
         // GET : Tuto/GetAllTuto
         [HttpGet("GetAllTuto")]
 
         public ActionResult<List<Tuto>> GetAllTuto()
         {
-            
-            return Ok();
+            return context.tuto.ToList();
         }
 
-        // POST: TutoController/Create
-        [HttpPost]
-        public ActionResult Create(IFormCollection collection)
+        // GET : Tuto/GetOneTuto
+        [HttpGet("GetOne/{id}")]
+
+        public ActionResult<Tuto> GetOneTuto(int id)
         {
-            try
+            Tuto tuto = context.tuto.Find(id);
+            if (tuto != null)
             {
-                return RedirectToAction(nameof(Index));
+                return tuto;
             }
-            catch
-            {
-                return View();
-            }
+            return NotFound("Pas la bonne ID bg");
         }
 
-        // POST: TutoController/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: TutoController/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
+        
     }
 }
